@@ -146,3 +146,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	makeChanges();
 	createMovieList(movieDB.movies, movieList);
 });
+
+// touches - отслеживание мультитач
+// targetTouches - мультитач конкретно на элементе
+// chengedTouches - отслеживание любого пальца при мультитаче
+
+const wrapper = document.querySelector('.wrapper');
+const btns = document.querySelectorAll('button');
+
+wrapper.addEventListener('click', event => {
+	if (event.target && event.target.tagName == 'BUTTON') {
+		console.log('Hello');
+	}
+});
