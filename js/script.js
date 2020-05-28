@@ -124,49 +124,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	};
 	modal.init();
 
-	// function User(name, id) {
-	// 	this.name = name;
-	// 	this.id = id;
-	// 	this.human = true;
-	// 	this.hello = function () {
-	// 		console.log(`Hello ${this.name}`);
-	// 	};
-	// }
-
-	// const ivan = new User('Ivan', 28);
-	// const alex = new User('Alex', 20);
-
-	// class Rectangle {
-	// 	constructor(height, width) {
-	// 		this.height = height;
-	// 		this.width = width;
-	// 	}
-
-	// 	calcArea() {
-	// 		return this.height * this.width;
-	// 	}
-	// }
-
-	// // Наследуем свойства от родителя
-	// class ColoredRectangleWithText extends Rectangle {
-	// 	constructor(height, width, text, bgColor) {
-	// 		super(height, width); // Вызываем тоже самое, что было у родителя + всегда на первом месте
-	// 		this.text = text;
-	// 		this.bgColor = bgColor;
-	// 	}
-
-	// 	showMyProps() {
-	// 		console.log(`Текст: ${this.text}, цвет: ${this.bgColor}`);
-	// 	}
-	// }
-
-	// const div = new ColoredRectangleWithText(25, 10, 'Hello', 'red');
-
-	// div.showMyProps();
-	// console.log(div.calcArea());
-
-	// Первый принцип ООП - Абстракция - когда мы разделяем концепцию (шаблона), от её экземпляра
-
 	// Карточки
 	class MenuCard {
 		constructor(src, alt, title, descr, price, parentSelector, ...classes) {
@@ -210,4 +167,26 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	new MenuCard('img/tabs/vegy.jpg', 'vegy', 'Меню "Фитнес"', 'Меню "Фитнес" -', 9, '.menu .container').render();
+
+	const inputRub = document.querySelector('#rub');
+	const inputUsd = document.querySelector('#usd');
+
+	inputRub.addEventListener('input', () => {
+		const request = new XMLHttpRequest();
+		request.open('GET', 'js/current.json');
+		request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+		request.send();
+
+		request.addEventListener('load', () => {
+			if (request.status === 200) {
+				console.log(request.response);
+				const data = JSON.parse(request.response);
+				inputUsd.value = (+inputRub.value / data.current.usd).toFixed(2);
+			} else {
+				inputUsd.value = 'Что-то пошло не так';
+			}
+		});
+
+		// status / statusText / response / readyState
+	});
 });
