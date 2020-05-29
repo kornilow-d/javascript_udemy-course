@@ -242,4 +242,65 @@ window.addEventListener('DOMContentLoaded', function () {
 			});
 		});
 	}
+
+	const req = new Promise((resolve, reject) => {
+		setTimeout(() => {
+			console.log('Подготовка данных...');
+
+			const product = {
+				name: 'TV',
+				price: 2000,
+			};
+
+			resolve(product);
+		}, 2000);
+	});
+
+	req.then(product => {
+		console.log('Данные получены');
+		setTimeout(() => {
+			product.status = 'order';
+		}, 2000);
+	});
+
+	req.then(product => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				product.status = 'order';
+				resolve(product);
+			});
+		});
+	})
+		.then(data => {
+			data.modify = true;
+			return data;
+		})
+		.then(data => {
+			console.log(data);
+		})
+		.catch(() => {
+			console.error('Ошибка');
+		})
+		.finally(() => {
+			console.error('finally');
+		});
+
+	// Test
+
+	const test = time => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => resolve(), time);
+		});
+	};
+
+	test(1000).then(() => console.log('1000 ms'));
+	test(2000).then(() => console.log('2000 ms'));
+
+	// Promise.all([test(1000), test(2000)]).then(() => {
+	// 	console.log('Done');
+	// });
+
+	Promise.race([test(1000), test(2000)]).then(() => {
+		console.log('All');
+	});
 });
