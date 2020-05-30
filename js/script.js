@@ -243,6 +243,8 @@ window.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
+	// Promise
+
 	const req = new Promise((resolve, reject) => {
 		setTimeout(() => {
 			console.log('Подготовка данных...');
@@ -282,7 +284,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			console.error('Ошибка');
 		})
 		.finally(() => {
-			console.error('finally');
+			// console.error('finally');
 		});
 
 	// Test
@@ -303,4 +305,21 @@ window.addEventListener('DOMContentLoaded', function () {
 	Promise.race([test(1000), test(2000)]).then(() => {
 		console.log('All');
 	});
+
+	// Fetch
+	fetch('https://jsonplaceholder.typicode.com/posts', {
+		method: 'POST',
+		body: JSON.stringify({ name: 'Alex' }),
+		headers: {
+			'Content-type': 'application/json',
+		},
+	})
+		.then(response => response.json())
+		.then(json => console.log(json))
+		.catch(() => {
+			alert('Ошибка');
+		})
+		.finally(() => {
+			//
+		});
 });
