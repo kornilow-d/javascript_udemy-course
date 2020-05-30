@@ -247,7 +247,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	const req = new Promise((resolve, reject) => {
 		setTimeout(() => {
-			console.log('Подготовка данных...');
+			// console.log('Подготовка данных...');
 
 			const product = {
 				name: 'TV',
@@ -259,7 +259,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	});
 
 	req.then(product => {
-		console.log('Данные получены');
+		// console.log('Данные получены');
 		setTimeout(() => {
 			product.status = 'order';
 		}, 2000);
@@ -278,10 +278,10 @@ window.addEventListener('DOMContentLoaded', function () {
 			return data;
 		})
 		.then(data => {
-			console.log(data);
+			// console.log(data);
 		})
 		.catch(() => {
-			console.error('Ошибка');
+			// console.error('Ошибка');
 		})
 		.finally(() => {
 			// console.error('finally');
@@ -295,15 +295,15 @@ window.addEventListener('DOMContentLoaded', function () {
 		});
 	};
 
-	test(1000).then(() => console.log('1000 ms'));
-	test(2000).then(() => console.log('2000 ms'));
+	// test(1000).then(() => console.log('1000 ms'));
+	// test(2000).then(() => console.log('2000 ms'));
 
 	// Promise.all([test(1000), test(2000)]).then(() => {
 	// 	console.log('Done');
 	// });
 
 	Promise.race([test(1000), test(2000)]).then(() => {
-		console.log('All');
+		// console.log('All');
 	});
 
 	// Fetch
@@ -326,22 +326,22 @@ window.addEventListener('DOMContentLoaded', function () {
 	// Filter
 	const names = ['Ivan', 'Ann', 'Ksenia', 'Voldemart'];
 	const shortNames = names.filter(name => name.length < 5);
-	console.log(shortNames);
+	// console.log(shortNames);
 
 	// Map
 	let answers = ['IvAn', 'AnnA', 'Hello'];
 	answers = answers.map(item => item.toLocaleLowerCase());
-	console.log(answers);
+	// console.log(answers);
 
 	// every/some
 	const some = [4, 3, 2];
-	console.log(some.some(item => typeof item === 'number'));
-	console.log(some.every(item => typeof item === 'number'));
+	// console.log(some.some(item => typeof item === 'number'));
+	// console.log(some.every(item => typeof item === 'number'));
 
 	// reduce
 	const arr = [4, 5, 1, 3, 2, 6];
 	const res = arr.reduce((sum, curret) => sum + curret);
-	console.log(res);
+	// console.log(res);
 
 	const obj = {
 		ivan: 'persone',
@@ -353,5 +353,11 @@ window.addEventListener('DOMContentLoaded', function () {
 	const newArr = Object.entries(obj)
 		.filter(item => item[1] === 'persone')
 		.map(item => item[0]);
-	console.log(newArr);
+	// console.log(newArr);
+
+	const jsonserver = require('json-server');
+	// JSON-server
+	fetch('http://localhost:3000/menu')
+		.then(data => data.json())
+		.then(res => console.log(res));
 });
