@@ -322,4 +322,36 @@ window.addEventListener('DOMContentLoaded', function () {
 		.finally(() => {
 			//
 		});
+
+	// Filter
+	const names = ['Ivan', 'Ann', 'Ksenia', 'Voldemart'];
+	const shortNames = names.filter(name => name.length < 5);
+	console.log(shortNames);
+
+	// Map
+	let answers = ['IvAn', 'AnnA', 'Hello'];
+	answers = answers.map(item => item.toLocaleLowerCase());
+	console.log(answers);
+
+	// every/some
+	const some = [4, 3, 2];
+	console.log(some.some(item => typeof item === 'number'));
+	console.log(some.every(item => typeof item === 'number'));
+
+	// reduce
+	const arr = [4, 5, 1, 3, 2, 6];
+	const res = arr.reduce((sum, curret) => sum + curret);
+	console.log(res);
+
+	const obj = {
+		ivan: 'persone',
+		ann: 'persone',
+		dog: 'animal',
+		cat: 'animal',
+	};
+
+	const newArr = Object.entries(obj)
+		.filter(item => item[1] === 'persone')
+		.map(item => item[0]);
+	console.log(newArr);
 });
