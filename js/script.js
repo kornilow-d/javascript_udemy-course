@@ -166,7 +166,21 @@ window.addEventListener('DOMContentLoaded', function () {
 		}
 	}
 
-	new MenuCard('img/tabs/vegy.jpg', 'vegy', 'Меню "Фитнес"', 'Меню "Фитнес" -', 9, '.menu .container').render();
+	const getResourse = async url => {
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+		}
+
+		return await res.json();
+	};
+
+	getResourse('http://localhost:3000/menu').then(data => {
+		data.forEach(({ img, altimg, title, descr, price }) => {
+			new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+		});
+	});
 
 	// const inputRub = document.querySelector('#rub');
 	// const inputUsd = document.querySelector('#usd');
@@ -201,45 +215,50 @@ window.addEventListener('DOMContentLoaded', function () {
 	};
 
 	forms.forEach(item => {
-		postData(item);
+		bindPostData(item);
 	});
 
-	function postData(form) {
-		form.addEventListener('submit', event => {
-			event.preventDefault();
+	const postData = async (url, data) => {
+		const res = await fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+			body: data,
+		});
+		return await res.json();
+	};
 
-			const statusMessage = document.createElement('div');
-			statusMessage.classList.add('status');
-			statusMessage.textContent = message.loading;
-			form.append(statusMessage);
+	function bindPostData(form) {
+		form.addEventListener('submit', e => {
+			e.preventDefault();
 
-			const request = new XMLHttpRequest();
-			request.open('POST', 'server.php');
+			let statusMessage = document.createElement('img');
+			statusMessage.src = message.loading;
+			statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+			form.insertAdjacentElement('afterend', statusMessage);
 
-			request.setRequestHeader('Content-type', 'application/json');
 			const formData = new FormData(form);
 
-			const object = {};
-			formData.forEach(function (value, key) {
-				object[key] = value;
-			});
+			const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-			const json = JSON.stringify(object);
+			// const object = {};
+			// formData.forEach(function (value, key) {
+			// 	object[key] = value;
+			// });
 
-			request.send(json);
-
-			request.addEventListener('load', () => {
-				if (request.status === 200) {
-					console.log(request.response);
-					statusMessage.textContent = message.success;
+			postData('http://localhost:3000/requests', json)
+				.then(data => {
+					console.log(data);
+					statusMessage.remove();
+				})
+				.catch(() => {})
+				.finally(() => {
 					form.reset();
-					setTimeout(() => {
-						statusMessage.remove();
-					}, 2000);
-				} else {
-					statusMessage.textContent = message.failure;
-				}
-			});
+				});
 		});
 	}
 
@@ -307,21 +326,21 @@ window.addEventListener('DOMContentLoaded', function () {
 	});
 
 	// Fetch
-	fetch('https://jsonplaceholder.typicode.com/posts', {
-		method: 'POST',
-		body: JSON.stringify({ name: 'Alex' }),
-		headers: {
-			'Content-type': 'application/json',
-		},
-	})
-		.then(response => response.json())
-		.then(json => console.log(json))
-		.catch(() => {
-			alert('Ошибка');
-		})
-		.finally(() => {
-			//
-		});
+	// fetch('https://jsonplaceholder.typicode.com/posts', {
+	// 	method: 'POST',
+	// 	body: JSON.stringify({ name: 'Alex' }),
+	// 	headers: {
+	// 		'Content-type': 'application/json',
+	// 	},
+	// })
+	// 	.then(response => response.json())
+	// 	.then(json => console.log(json))
+	// 	.catch(() => {
+	// 		alert('Ошибка');
+	// 	})
+	// 	.finally(() => {
+	// 		//
+	// 	});
 
 	// Filter
 	const names = ['Ivan', 'Ann', 'Ksenia', 'Voldemart'];
@@ -355,7 +374,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		.map(item => item[0]);
 	// console.log(newArr);
 
-	const jsonserver = require('json-server');
+	// const jsonserver = require('json-server');
 	// JSON-server
 	fetch('http://localhost:3000/menu')
 		.then(data => data.json())
